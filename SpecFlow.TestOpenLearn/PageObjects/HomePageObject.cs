@@ -12,9 +12,15 @@ namespace SpecFlow.TestOpenLearn.PageObjects
     {
         string HomeUrl { get; }
 
-        void EnterIntoInputSearch(string input, string xpath);
-        void ClickButtonSearch(string xpath);
         bool VisibleAllElement();
+        void ClickScrollDownIcon();
+        bool VisibleStickyMenu();
+        void ClickElement(string xpath);
+        void EnterIntoElement(string input, string xpath);
+        void ClickSearchIconStickyElement();
+        bool VisibleSearchSticky();
+        void EnterIntoInputSearch(string input);
+        void ClickButtonSearch();
     }
 
     public class HomePageObject : IHomePageObject
@@ -50,10 +56,14 @@ namespace SpecFlow.TestOpenLearn.PageObjects
         private IWebElement BannerSearchInputElement => _browserDriver.Current.FindElement(By.XPath("//input[@id='banner_search_text']"));
         private IWebElement BannerButtonSearchElement => _browserDriver.Current.FindElement(By.XPath("//a[@class='search']"));
         private IWebElement ButtonScrollElement => _browserDriver.Current.FindElement(By.XPath("//a[@id='scroll-content']"));
+        private IWebElement StickyMenuElement => _browserDriver.Current.FindElement(By.XPath("//div[@class='main_sticky']"));
+        private IWebElement SearchIconStickyElement => _browserDriver.Current.FindElement(By.XPath("//div[@class='link_search icon_link']//a"));
+        private IWebElement SearchStickyElement => _browserDriver.Current.FindElement(By.XPath("//div[@class='search_box box_form show']"));
+        private IWebElement SearchInputStickyElement => _browserDriver.Current.FindElement(By.XPath("//input[@id='main_search_text_header']"));
+        private IWebElement SearchButtonStickyElement => _browserDriver.Current.FindElement(By.XPath("//div[@class='search_box box_form show']//button[@class='search icon-search']"));
 
 
-        private IWebElement InputSearch(string xpath) => _browserDriver.Current.FindElement(By.XPath($"{xpath}"));
-        private IWebElement ButtonSearch(string xpath) => _browserDriver.Current.FindElement(By.XPath($"{xpath}"));
+        private IWebElement Element(string xpath) => _browserDriver.Current.FindElement(By.XPath($"{xpath}"));
 
         public bool VisibleAllElement()
         {
@@ -80,15 +90,45 @@ namespace SpecFlow.TestOpenLearn.PageObjects
                 && ButtonScrollElement.Displayed;
         }
 
-        public void EnterIntoInputSearch(string input, string xpath)
+        public void EnterIntoElement(string input, string xpath)
         {
-            InputSearch(xpath).Clear();
-            InputSearch(xpath).SendKeys(input);
+            Element(xpath).Clear();
+            Element(xpath).SendKeys(input);
+        }
+        public void ClickElement(string xpath)
+        {
+            Element(xpath).Click();
         }
 
-        public void ClickButtonSearch(string xpath)
+        public void ClickSearchIconStickyElement()
         {
-            ButtonSearch(xpath).Click();
+            SearchIconStickyElement.Click();
+        }
+
+        public bool VisibleSearchSticky()
+        {
+            return SearchStickyElement.Displayed;
+        }
+
+        public void EnterIntoInputSearch(string input)
+        {
+            SearchInputStickyElement.Clear();
+            SearchInputStickyElement.SendKeys(input);
+        }
+
+        public void ClickButtonSearch()
+        {
+            SearchButtonStickyElement.Click();
+        }
+
+        public void ClickScrollDownIcon()
+        {
+            ButtonScrollElement.Click();
+        }
+
+        public bool VisibleStickyMenu()
+        {
+            return StickyMenuElement.Displayed;
         }
     }
 }
