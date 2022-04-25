@@ -34,6 +34,26 @@ namespace SpecFlow.TestOpenLearn.Steps
             bool result = _homePageObject.VisibleAllElement();
             Console.WriteLine($"result: {result}");
             result.Should().Be(true);
+            _homePageObject.GetAltAttributeLogoElement().Should().Be("The Open University");
+            _homePageObject.GetAltAttributeOpenLearnLogoElement().Should().Be("OpenLearn");
+            _homePageObject.GetTextAttributeTagLineElement().Should().Be("Free learning from\r\nThe Open University");
+            _homePageObject.GetTextAttributeTheOpenUniversityElement().Should().Be("The Open University");
+            _homePageObject.GetTextAttributeStudyWithTheOpenUniversityElement().Should().Be("Study with The Open University");
+            _homePageObject.GetTextAttributeSearchForElement().Should().Be("Search for");
+            _homePageObject.GetPlaceholderAttributeSearchInputElement().Should().Be("Free courses, interactives, videos and more");
+            _homePageObject.GetTitleAttributeButtonSearchElement().Should().Be("Search");
+            _homePageObject.GetTextAttributeLinkHomeElement().Should().Be("Home");
+            _homePageObject.GetTextAttributeLinkFreeCoursesElement().Should().Be("Free courses");
+            _homePageObject.GetTextAttributeLinkSubjectsElement().Should().Be("Subjects");
+            _homePageObject.GetTextAttributeLinkForStudyElement().Should().Be("For Study");
+            _homePageObject.GetTextAttributeLinkForLifeElement().Should().Be("For Life");
+            _homePageObject.GetTextAttributeLinkHelpElement().Should().Be("Help");
+            _homePageObject.GetTitleAttributeLinkSignInElement().Should().Be("Create account / Sign in");
+            _homePageObject.GetTextAttributeBannerHeadingElement().Should().Be("Dive in and start learning");
+            _homePageObject.GetTextAttributeBannerSubHeadingElement().Should().Be("Everything on the multi-award winning OpenLearn is free to everyone!");
+            _homePageObject.GetPlaceholderAttributeBannerSearchInputElement().Should().Be("Over 1000s of free courses, interactives, videos and more...");
+            _homePageObject.GetTitleAttributeBannerButtonSearchElement().Should().Be("Search");
+            _homePageObject.GetTitleAttributeButtonScrollElement().Should().Be("Scroll down to OpenLearn content");
         }
         #endregion
 

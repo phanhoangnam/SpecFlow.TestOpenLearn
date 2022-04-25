@@ -12,15 +12,35 @@ namespace SpecFlow.TestOpenLearn.PageObjects
     {
         string HomeUrl { get; }
 
-        bool VisibleAllElement();
-        void ClickScrollDownIcon();
-        bool VisibleStickyMenu();
-        void ClickElement(string xpath);
-        void EnterIntoElement(string input, string xpath);
-        void ClickSearchIconStickyElement();
-        bool VisibleSearchSticky();
-        void EnterIntoInputSearch(string input);
         void ClickButtonSearch();
+        void ClickElement(string xpath);
+        void ClickScrollDownIcon();
+        void ClickSearchIconStickyElement();
+        void EnterIntoElement(string input, string xpath);
+        void EnterIntoInputSearch(string input);
+        string GetAltAttributeLogoElement();
+        string GetAltAttributeOpenLearnLogoElement();
+        string GetPlaceholderAttributeBannerSearchInputElement();
+        string GetPlaceholderAttributeSearchInputElement();
+        string GetTextAttributeBannerHeadingElement();
+        string GetTextAttributeBannerSubHeadingElement();
+        string GetTextAttributeLinkForLifeElement();
+        string GetTextAttributeLinkForStudyElement();
+        string GetTextAttributeLinkFreeCoursesElement();
+        string GetTextAttributeLinkHelpElement();
+        string GetTextAttributeLinkHomeElement();
+        string GetTextAttributeLinkSubjectsElement();
+        string GetTextAttributeSearchForElement();
+        string GetTextAttributeStudyWithTheOpenUniversityElement();
+        string GetTextAttributeTagLineElement();
+        string GetTextAttributeTheOpenUniversityElement();
+        string GetTitleAttributeBannerButtonSearchElement();
+        string GetTitleAttributeButtonScrollElement();
+        string GetTitleAttributeButtonSearchElement();
+        string GetTitleAttributeLinkSignInElement();
+        bool VisibleAllElement();
+        bool VisibleSearchSticky();
+        bool VisibleStickyMenu();
     }
 
     public class HomePageObject : IHomePageObject
@@ -88,6 +108,94 @@ namespace SpecFlow.TestOpenLearn.PageObjects
                 && BannerSearchInputElement.Displayed
                 && BannerButtonSearchElement.Displayed
                 && ButtonScrollElement.Displayed;
+        }
+
+        public string GetAltAttributeLogoElement()
+        {
+            return LogoElement.GetAttribute("alt");
+        }
+
+        public string GetAltAttributeOpenLearnLogoElement()
+        {
+            return OpenLearnLogoElement.GetAttribute("alt");
+        }
+
+        public string GetTitleAttributeButtonSearchElement()
+        {
+            return ButtonSearchElement.GetAttribute("title");
+        }
+
+        public string GetTitleAttributeLinkSignInElement()
+        {
+            return LinkSignInElement.GetAttribute("title");
+        }
+
+        public string GetTitleAttributeBannerButtonSearchElement()
+        {
+            return BannerButtonSearchElement.GetAttribute("title");
+        }
+
+        public string GetTitleAttributeButtonScrollElement()
+        {
+            return ButtonScrollElement.GetAttribute("title");
+        }
+
+        public string GetTextAttributeTagLineElement()
+        {
+            return TagLineElement.Text;
+        }
+
+        public string GetTextAttributeTheOpenUniversityElement()
+        {
+            return TheOpenUniversityElement.Text;
+        }
+        public string GetTextAttributeStudyWithTheOpenUniversityElement()
+        {
+            return StudyWithTheOpenUniversityElement.Text;
+        }
+        public string GetTextAttributeSearchForElement()
+        {
+            return SearchForElement.Text;
+        }
+        public string GetPlaceholderAttributeSearchInputElement()
+        {
+            return SearchInputElement.GetAttribute("placeholder");
+        }
+        public string GetTextAttributeLinkHomeElement()
+        {
+            return LinkHomeElement.Text;
+        }
+        public string GetTextAttributeLinkFreeCoursesElement()
+        {
+            return LinkFreeCoursesElement.Text;
+        }
+        public string GetTextAttributeLinkSubjectsElement()
+        {
+            return LinkSubjectsElement.Text;
+        }
+        public string GetTextAttributeLinkForStudyElement()
+        {
+            return LinkForStudyElement.Text;
+        }
+        public string GetTextAttributeLinkForLifeElement()
+        {
+            return LinkForLifeElement.Text;
+        }
+        public string GetTextAttributeLinkHelpElement()
+        {
+            return LinkHelpElement.Text;
+        }
+        public string GetTextAttributeBannerHeadingElement()
+        {
+            return BannerHeadingElement.Text;
+        }
+        public string GetTextAttributeBannerSubHeadingElement()
+        {
+            return BannerSubHeadingElement.Text;
+        }
+        public string GetPlaceholderAttributeBannerSearchInputElement()
+        {
+            return BannerSearchInputElement.GetAttribute("placeholder");
         }
 
         public void EnterIntoElement(string input, string xpath)
