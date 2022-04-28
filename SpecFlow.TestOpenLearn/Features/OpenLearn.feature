@@ -49,3 +49,16 @@ Scenario: Verify search in the sticky menu
 	When I enter videos into the search input
 	And I click the search button
 	Then I see the search results page
+
+
+Scenario: new section get inspired
+	Given I go to Openlearn Home Page
+	Then  I check text and click link get inspired <xpath>
+	#Then I'll check card item of the home page
+
+Examples: 
+	| xpath                                                              |
+	| //a[contains(text(),'Get inspired and learn something new today')] |
+	| //img[@alt='Copyright free Icon']                                  |
+	| //img[@alt='Copyrighted Icon']                                     |
+	

@@ -1,9 +1,11 @@
-﻿using OpenQA.Selenium;
+﻿using FluentAssertions;
+using OpenQA.Selenium;
 using SpecFlow.TestOpenLearn.Drivers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SpecFlow.TestOpenLearn.PageObjects
@@ -41,6 +43,7 @@ namespace SpecFlow.TestOpenLearn.PageObjects
         bool VisibleAllElement();
         bool VisibleSearchSticky();
         bool VisibleStickyMenu();
+        void CheckAllTextAndIcon(string xpath);
     }
 
     public class HomePageObject : IHomePageObject
@@ -85,6 +88,10 @@ namespace SpecFlow.TestOpenLearn.PageObjects
 
         private IWebElement Element(string xpath) => _browserDriver.Current.FindElement(By.XPath($"{xpath}"));
 
+        private IWebElement TextElementInspired => _browserDriver.Current.FindElement(By.XPath("//a[contains(text(),'Get inspired and learn something new today')]"));
+        private IWebElement CopyFreeIcon => _browserDriver.Current.FindElement(By.XPath("//img[@alt='Copyright free Icon']"));
+        private IWebElement CopyIcon => _browserDriver.Current.FindElement(By.XPath("//img[@alt='Copyrighted Icon']"));
+
         public bool VisibleAllElement()
         {
             return LogoElement.Displayed
@@ -107,7 +114,8 @@ namespace SpecFlow.TestOpenLearn.PageObjects
                 && BannerSubHeadingElement.Displayed
                 && BannerSearchInputElement.Displayed
                 && BannerButtonSearchElement.Displayed
-                && ButtonScrollElement.Displayed;
+                && ButtonScrollElement.Displayed
+                && TextElementInspired.Displayed;
         }
 
         public string GetAltAttributeLogoElement()
@@ -204,8 +212,29 @@ namespace SpecFlow.TestOpenLearn.PageObjects
             Element(xpath).SendKeys(input);
         }
         public void ClickElement(string xpath)
+        {          
+            Element(xpath).Click();    
+        }
+
+        public void CheckAllTextAndIcon(string xpath)
         {
-            Element(xpath).Click();
+            //Get inspired and learn something new today
+            var a = Element(xpath).Text.Should().Be("Get inspired and learn something new today");
+            Thread.Sleep(3000);
+            Console.WriteLine($"TextInspiredElement: {a}");
+
+            //CopyFreeIcon
+            var freeIcon = CopyFreeIcon.GetAttribute("alt");
+            var resultCopyFreeIcon = CopyFreeIcon.Should().Be("Copyright free Icon");
+            Thread.Sleep(3000);
+            Console.WriteLine($"Copyright free Icon: {resultCopyFreeIcon}");
+           
+
+            //Copyrighted Icon
+            var CopyrightedIcon = CopyIcon.GetAttribute("alt");
+            var resultCopyrightedIcon = CopyrightedIcon.Should().Be("Copyrighted Icon");
+            Thread.Sleep(3000);
+            Console.WriteLine($"Copyrighted Icon: {resultCopyrightedIcon}");
         }
 
         public void ClickSearchIconStickyElement()

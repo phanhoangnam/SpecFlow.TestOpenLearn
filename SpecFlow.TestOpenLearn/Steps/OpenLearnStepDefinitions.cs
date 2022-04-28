@@ -143,6 +143,25 @@ namespace SpecFlow.TestOpenLearn.Steps
             _homePageObject.ClickButtonSearch();
         }
 
+        #region get inspired
+        [Then(@"I'll check card item of the home page")]
+        public void ThenILlCheckCardItemOfTheHomePage()
+        {
+            ScenarioContext.Current.Pending();
+        }
+        [Then(@"I check text and click link get inspired (.*)")]
+        public void ThenICheckTextAndClickLinkGetInspired(string xpath)
+        {
+            //Check all text
+            _homePageObject.CheckAllTextAndIcon(xpath);
+            //click link get inspired
+            _homePageObject.ClickElement(xpath);
+
+            Thread.Sleep(3000);
+        }
+
+        #endregion
+
         #endregion
     }
 }
