@@ -2,6 +2,7 @@
 using SpecFlow.TestOpenLearn.Drivers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,6 +42,12 @@ namespace SpecFlow.TestOpenLearn.PageObjects
         bool VisibleAllElement();
         bool VisibleSearchSticky();
         bool VisibleStickyMenu();
+
+        string GetTextSectionTitle();
+        int CountBlockElements();
+        bool DisplayElement(string xpath);
+        void ClickSectionTitle();
+        ReadOnlyCollection<IWebElement> GetElements(string xpath);
     }
 
     public class HomePageObject : IHomePageObject
@@ -84,6 +91,35 @@ namespace SpecFlow.TestOpenLearn.PageObjects
 
 
         private IWebElement Element(string xpath) => _browserDriver.Current.FindElement(By.XPath($"{xpath}"));
+
+        private IWebElement SectionTitle => _browserDriver.Current.FindElement(By.XPath("//a[contains(text(),'Get inspired and learn something new today')]"));
+        private ReadOnlyCollection<IWebElement> BlockElements => _browserDriver.Current.FindElements(By.XPath("//div[contains(@class, \"col-lg-3 col-md-3 col-sm-6 col-xs-12\")]"));
+        private ReadOnlyCollection<IWebElement> Elements(string xpath) => _browserDriver.Current.FindElements(By.XPath($"{xpath}"));
+
+        public ReadOnlyCollection<IWebElement> GetElements(string xpath)
+        {
+            return Elements(xpath);
+        }
+
+        public void ClickSectionTitle()
+        {
+            SectionTitle.Click();
+        }
+
+        public string GetTextSectionTitle()
+        {
+            return SectionTitle.Text;
+        }
+
+        public int CountBlockElements()
+        {
+            return BlockElements.Count;
+        }
+
+        public bool DisplayElement(string xpath)
+        {
+            return Element(xpath).Displayed;
+        }
 
         public bool VisibleAllElement()
         {

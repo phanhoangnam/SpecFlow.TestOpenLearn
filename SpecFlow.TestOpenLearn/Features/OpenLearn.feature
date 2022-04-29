@@ -49,3 +49,29 @@ Scenario: Verify search in the sticky menu
 	When I enter videos into the search input
 	And I click the search button
 	Then I see the search results page
+
+
+# Get inspired section
+@AC1_get-inspired
+Scenario: Check items in "Get inspired and learn something new today" section on the page
+	Given I click scroll down icon
+	And The sticky menu is showing
+	Then I see section title
+	And I see 8 blocks
+	And Each block has elements fully
+
+@AC2_get-inspired
+Scenario: Check link "Get inspired and learn something new today"
+	When I click link title section
+	Then The link work correctly
+
+@AC3_get-inspired
+Scenario: Check Copy Right icon
+	When I click Copy Right icon
+	Then The text of copyright is shown
+
+@AC4_get-inspired
+Scenario: Check image link and block title link
+	When I click the image
+	And I click block title
+	Then I should be navigated to the same page

@@ -1,9 +1,14 @@
 ﻿using FluentAssertions;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SpecFlow.TestOpenLearn.Drivers;
 using SpecFlow.TestOpenLearn.PageObjects;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using TechTalk.SpecFlow;
+using SeleniumExtras.WaitHelpers;
 
 namespace SpecFlow.TestOpenLearn.Steps
 {
@@ -142,7 +147,152 @@ namespace SpecFlow.TestOpenLearn.Steps
         {
             _homePageObject.ClickButtonSearch();
         }
+        #endregion
 
+
+        #region Get inspired section
+        #region AC1
+        [Then(@"I see section title")]
+        public void ThenISeeSectionTitle()
+        {
+            string title = _homePageObject.GetTextSectionTitle();
+            Console.WriteLine($"title: {title}");
+            title.Should().Be("Get inspired and learn something new today");
+        }
+
+        [Then(@"I see (.*) blocks")]
+        public void ThenISeeBlocks(int number)
+        {
+            int blocksCount = _homePageObject.CountBlockElements();
+            Console.WriteLine($"blocksCount: {blocksCount}");
+            blocksCount.Should().Be(number);
+        }
+
+        [Then(@"Each block has elements fully")]
+        public void ThenEachBlockHasElementsFully()
+        {
+            bool result = true;
+            ReadOnlyCollection<IWebElement> imageElements = _homePageObject.GetElements("//div[contains(@class, \"box-image\")]");
+            ReadOnlyCollection<IWebElement> copyrightElements = _homePageObject.GetElements("//span[contains(@class, \"img_permissions_icon emulate-link-focus copyright-icon\")]");
+            ReadOnlyCollection<IWebElement> subjectTitleElements = _homePageObject.GetElements("//p[contains(@class, \"subject-name\")]");
+            ReadOnlyCollection<IWebElement> blockTitleElements = _homePageObject.GetElements("//h3[contains(@class, \"content-title\")]");
+            ReadOnlyCollection<IWebElement> blockDescriptionElements = _homePageObject.GetElements("//p[contains(@class, \"dotdot content-text\")]");
+            
+            for(int i = 0; i < 8; i++)
+            {
+                copyrightElements[i].Click();
+                result = result
+                        && imageElements[i].Displayed
+                        && copyrightElements[i].Displayed
+                        && subjectTitleElements[i].Displayed
+                        && blockTitleElements[i].Displayed
+                        && blockDescriptionElements[i].Displayed;
+                Console.WriteLine($"result: {result}");
+            }
+            result.Should().Be(true);
+        }
+
+        #endregion
+
+        #region AC2
+        [When(@"I click link title section")]
+        public void WhenIClickLinkTitleSection()
+        {
+            _homePageObject.ClickSectionTitle();
+            Thread.Sleep(3000);
+        }
+
+        [Then(@"The link work correctly")]
+        public void ThenTheLinkWorkCorrectly()
+        {
+            string url = _browserDriver.Current.Url;
+            Console.WriteLine($"url: {url}");
+            url.Should().Be("https://www.open.edu/openlearn/latest-from-openlearn");
+        }
+
+        #endregion
+
+        #region AC3
+        [When(@"I click Copy Right icon")]
+        public void WhenIClickCopyRightIcon()
+        {
+            ReadOnlyCollection<IWebElement> copyrightIconElements = _homePageObject.GetElements("//span[contains(@class, \"img_permissions_icon emulate-link-focus copyright-icon\")]");
+            foreach (IWebElement item in copyrightIconElements)
+            {
+                item.Click();
+                Console.WriteLine("Clicked");
+                Thread.Sleep(2000);
+            }
+        }
+
+        [Then(@"The text of copyright is shown")]
+        public void ThenTheTextOfCopyrightIsShown()
+        {
+            bool result = true;
+            ReadOnlyCollection<IWebElement> attributeElements = _homePageObject.GetElements("//span[contains(@class, \"img_permissions_text\")]");
+            foreach (IWebElement item in attributeElements)
+            {
+                result = result && item.Displayed;
+                Console.WriteLine($"result: {result}");
+            }
+            result.Should().Be(true);
+        }
+
+        #endregion
+
+        #region AC4
+        private List<string> urlFromImage = new List<string>();
+        private List<string> urlFromBlockTitle = new List<string>();
+        [When(@"I click the image")]
+        public void WhenIClickTheImage()
+        {
+            ReadOnlyCollection<IWebElement> imageElements = _homePageObject.GetElements("//div[contains(@class, \"box-image\")]");
+            for(int i = 0; i < 8; i++)
+            {
+                Console.WriteLine($"item: {imageElements[i]}");
+                imageElements[i].Click();
+                Thread.Sleep(2000);
+                urlFromImage.Add(_browserDriver.Current.Url);
+                _browserDriver.Current.Navigate().Back();
+                //Thread.Sleep(3000);
+                WebDriverWait wait = new WebDriverWait(_browserDriver.Current, TimeSpan.FromSeconds(10));
+                imageElements = wait.Until(x => x.FindElements(By.XPath("//div[contains(@class, \"box-image\")]")));
+            }
+        }
+
+        [When(@"I click block title")]
+        public void WhenIClickBlockTitle()
+        {
+            ReadOnlyCollection<IWebElement> blockTitleElements = _homePageObject.GetElements("//h3[contains(@class, \"content-title\")]");
+            for (int i = 0; i < 8; i++)
+            {
+                Console.WriteLine($"item: {blockTitleElements[i]}");
+                blockTitleElements[i].Click();
+                Thread.Sleep(2000);
+                urlFromBlockTitle.Add(_browserDriver.Current.Url);
+                _browserDriver.Current.Navigate().Back();
+                //Thread.Sleep(3000);
+                WebDriverWait wait = new WebDriverWait(_browserDriver.Current, TimeSpan.FromSeconds(10));
+                blockTitleElements = wait.Until(x => x.FindElements(By.XPath("//h3[contains(@class, \"content-title\")]")));
+            }
+        }
+
+        [Then(@"I should be navigated to the same page")]
+        public void ThenIShouldBeNavigatedToTheSamePage()
+        {
+            bool result = true;
+            for(int i = 0; i < 8; i++)
+            {
+                if (urlFromImage[i] != urlFromBlockTitle[i])
+                {
+                    result = false;
+                    break;
+                }
+            }
+            result.Should().Be(true);
+        }
+
+        #endregion
         #endregion
     }
 }
