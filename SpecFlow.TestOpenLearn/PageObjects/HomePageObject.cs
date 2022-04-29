@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using SpecFlow.TestOpenLearn.Drivers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -44,6 +45,9 @@ namespace SpecFlow.TestOpenLearn.PageObjects
         bool VisibleSearchSticky();
         bool VisibleStickyMenu();
         void CheckAllTextAndIcon(string xpath);
+        int CheckCardItem();
+        void ClickGetInspired();
+        void PressIconOfAllCardItem();
     }
 
     public class HomePageObject : IHomePageObject
@@ -89,9 +93,10 @@ namespace SpecFlow.TestOpenLearn.PageObjects
         private IWebElement Element(string xpath) => _browserDriver.Current.FindElement(By.XPath($"{xpath}"));
 
         private IWebElement TextElementInspired => _browserDriver.Current.FindElement(By.XPath("//a[contains(text(),'Get inspired and learn something new today')]"));
-        private IWebElement CopyFreeIcon => _browserDriver.Current.FindElement(By.XPath("//img[@alt='Copyright free Icon']"));
-        private IWebElement CopyIcon => _browserDriver.Current.FindElement(By.XPath("//img[@alt='Copyrighted Icon']"));
+        private ReadOnlyCollection<IWebElement> CardItemElement => _browserDriver.Current.FindElements(By.XPath("//div[contains(@class, 'col-lg-3 col-md-3 col-sm-6 col-xs-12')]"));
 
+        private ReadOnlyCollection<IWebElement> CopyFreeIcon => _browserDriver.Current.FindElements(By.XPath("//img[@alt='Copyright free Icon']"));
+        private ReadOnlyCollection<IWebElement> CopyIcon => _browserDriver.Current.FindElements(By.XPath("//img[@alt='Copyrighted Icon']"));
         public bool VisibleAllElement()
         {
             return LogoElement.Displayed
@@ -213,29 +218,65 @@ namespace SpecFlow.TestOpenLearn.PageObjects
         }
         public void ClickElement(string xpath)
         {          
-            Element(xpath).Click();    
+            Element(xpath).Click();
+            Thread.Sleep(3000);
+        }
+
+        public void ClickGetInspired()
+        {
+            TextElementInspired.Click();
+            Thread.Sleep(3000);
         }
 
         public void CheckAllTextAndIcon(string xpath)
         {
-            //Get inspired and learn something new today
-            var a = Element(xpath).Text.Should().Be("Get inspired and learn something new today");
-            Thread.Sleep(3000);
-            Console.WriteLine($"TextInspiredElement: {a}");
+            if (xpath == "//a[contains(text(),'Get inspired and learn something new today')]")
+            {
+                //Get inspired and learn something new today
+                var a = Element(xpath).Text.Should().Be("Get inspired and learn something new today");
+                Thread.Sleep(3000);
+                Console.WriteLine($"TextInspiredElement: {a}");
+            }
+            if (xpath == "//img[@alt='Copyright free Icon']")
+            {
+                //CopyFreeIcon
+                var freeIcon = Element(xpath).GetAttribute("alt");
+                Thread.Sleep(3000);
+                Console.WriteLine($"Copyright free Icon: {freeIcon}");
+            }
 
-            //CopyFreeIcon
-            var freeIcon = CopyFreeIcon.GetAttribute("alt");
-            var resultCopyFreeIcon = CopyFreeIcon.Should().Be("Copyright free Icon");
-            Thread.Sleep(3000);
-            Console.WriteLine($"Copyright free Icon: {resultCopyFreeIcon}");
-           
-
-            //Copyrighted Icon
-            var CopyrightedIcon = CopyIcon.GetAttribute("alt");
-            var resultCopyrightedIcon = CopyrightedIcon.Should().Be("Copyrighted Icon");
-            Thread.Sleep(3000);
-            Console.WriteLine($"Copyrighted Icon: {resultCopyrightedIcon}");
+            if (xpath == "//img[@alt='Copyrighted Icon']")
+            {
+                //Copyrighted Icon
+                var CopyrightedIcon = Element(xpath).GetAttribute("alt");
+                Thread.Sleep(3000);
+                Console.WriteLine($"Copyrighted Icon: {CopyrightedIcon}");
+            }                  
+            
         }
+
+        public void PressIconOfAllCardItem()
+        {         
+            foreach (IWebElement item in CopyFreeIcon)
+            {
+                item.Click();
+                Thread.Sleep(2000);
+            }
+
+            foreach (IWebElement item in CopyIcon)
+            {
+                item.Click();
+                Thread.Sleep(2000);
+            }
+        }
+
+        public int CheckCardItem()
+        {
+            var a =  CardItemElement.Count;
+            Console.WriteLine($"CardItem:{a}");
+            return a;
+        }
+        
 
         public void ClickSearchIconStickyElement()
         {

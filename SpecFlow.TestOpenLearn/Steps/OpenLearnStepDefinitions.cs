@@ -144,21 +144,35 @@ namespace SpecFlow.TestOpenLearn.Steps
         }
 
         #region get inspired
+        [When(@"The sticky menu is showing")]
+        public void WhenTheStickyMenuIsShowing()
+        {
+            bool result = _homePageObject.VisibleStickyMenu();
+            Console.WriteLine($"sticky menu: {result}");
+            result.Should().Be(true);
+        }
         [Then(@"I'll check card item of the home page")]
         public void ThenILlCheckCardItemOfTheHomePage()
         {
-            ScenarioContext.Current.Pending();
+            _homePageObject.CheckCardItem();
         }
+
         [Then(@"I check text and click link get inspired (.*)")]
         public void ThenICheckTextAndClickLinkGetInspired(string xpath)
         {
             //Check all text
             _homePageObject.CheckAllTextAndIcon(xpath);
             //click link get inspired
-            _homePageObject.ClickElement(xpath);
+            _homePageObject.ClickGetInspired();
 
-            Thread.Sleep(3000);
         }
+
+        [Then(@"I press the icon of all card item")]
+        public void ThenIPressTheIconOfAllCardItem()
+        {
+            _homePageObject.PressIconOfAllCardItem();
+        }
+
 
         #endregion
 

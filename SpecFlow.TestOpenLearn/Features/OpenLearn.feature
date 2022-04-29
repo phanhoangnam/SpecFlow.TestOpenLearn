@@ -51,14 +51,28 @@ Scenario: Verify search in the sticky menu
 	Then I see the search results page
 
 
-Scenario: new section get inspired
+@AC1_2_GetInspired
+Scenario Outline: new section get inspired
 	Given I go to Openlearn Home Page
+	And   I click scroll down icon
+	When  The sticky menu is showing
 	Then  I check text and click link get inspired <xpath>
-	#Then I'll check card item of the home page
+	
+	
 
 Examples: 
 	| xpath                                                              |
 	| //a[contains(text(),'Get inspired and learn something new today')] |
 	| //img[@alt='Copyright free Icon']                                  |
 	| //img[@alt='Copyrighted Icon']                                     |
-	
+
+
+@AC3_GetInspired_PressIcon
+Scenario Outline: Press Icon of all card item
+	Given I go to Openlearn Home Page
+	And   I click scroll down icon
+	When  The sticky menu is showing
+	Then  I'll check card item of the home page
+	Then  I press the icon of all card item
+
+@AC4_GetInspired
